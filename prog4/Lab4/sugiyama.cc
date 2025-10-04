@@ -18,9 +18,10 @@ gcd(const polynomialT<T> &a, const polynomialT<T> &b,
 
 // Function definition: gcd
 template <class T>  void
-gcd(const polynomialT<T> &a, const polynomialT<T> &b, polynomialT<T> &g,
-	polynomialT<T> &s, polynomialT<T> &t, int rdeg)
+sugiyama(const polynomialT<T> &a, const polynomialT<T> &b, polynomialT<T> &r,
+	polynomialT<T> &s, polynomialT<T> &t, int p)
 {
+   polynomialT<T> g;
    polynomialT<T> qi;  // quotient
    polynomialT<T> ri, rim1, rim2, si, sim1, sim2, ti, tim1, tim2;
    polynomialT<T> *rip, *rim1p, *rim2p, *sip, *sim1p, *sim2p;
@@ -34,9 +35,9 @@ gcd(const polynomialT<T> &a, const polynomialT<T> &b, polynomialT<T> &g,
    rim2 = a;
    rim1 = b;
    polynomialT<T> exit_cond = {0};
-   ri = {1};
+   ri = b;
    int i = 0;
-   while(ri != exit_cond)
+   while(ri.degree >= p)
    {
       i++;
       if (i == 1)
@@ -52,23 +53,30 @@ gcd(const polynomialT<T> &a, const polynomialT<T> &b, polynomialT<T> &g,
       else
       {
          //progress along the pipeline
-         rim1 = ri;
          rim2 = rim1;
-         sim1 = si;
+         rim1 = ri;
          sim2 = sim1;
-         tim1 = ti;
+         sim1 = si;
          tim2 = tim1;
+         tim1 = ti;
       }
+      //cout << "rim2 is " << rim2 << endl;
+      //cout << "rim1 is " << rim1 << endl;
+      //cout << "sim2 is " << sim2 << endl;
+      //cout << "sim1 is " << sim1 << endl;
+      //cout << "tim2 is " << tim2 << endl;
+      //cout << "tim1 is " << tim1 << endl;
       qi = rim2/rim1;
       ri = rim2 - qi * rim1;
       si = sim2 - qi * sim1;
       ti = tim2 - qi * tim1;
+      //cout << "ri is " << ri << endl;
+      //cout << "ri degree is " << ri.degree << endl;
    }
-   cout << "ri is " << ri << endl;
-   cout << "ri degree is " << ri.degree << endl;
+   r = ri;
    g = rim1;
-   t = tim1;
-   s = sim1;
+   t = ti;
+   s = si;
 }
 
 

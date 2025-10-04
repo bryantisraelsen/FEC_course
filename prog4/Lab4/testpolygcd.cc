@@ -45,6 +45,21 @@ int main()
 
    cout << "\n\n\n";
 
+   POLYC(Z5,a_0,{1,2,3,4,3,2}); // 1+2x+3x^2+4x^3+3x^4+2x^5
+   POLYC(Z5,b_0,{3,4,3,2,1});  // 3+4x+3x^2+2x^3+x^4
+
+   polynomialT<Z5> s_0, t_0, g_0;
+   a_0.setprintdir(1);
+
+   cout << "a=" << a_0 << endl;
+   cout << "b=" << b_0 << endl;
+   gcd(a_0,b_0,g_0,s_0,t_0);
+   cout << "g=" << g_0 << endl; 
+   cout << "s=" << s_0 << endl;
+   cout << "t=" << t_0 << endl;
+
+   cout << "\n\n\n";
+
    double d1d[4] = {2,8,10,4};
    double d2d[4] = {1,7,14,8};
 
