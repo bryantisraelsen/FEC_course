@@ -54,10 +54,10 @@ int main()
 	  cout << " state: " << conv.getstate() << endl;
 	  // call the decoder
 	  decout = decoder.decode(out);
-      // decoder.showpaths();
-	  if(decout) {
-		 cout << "INPUT FOUND: " << decoder.inputs << endl;
-	  }
+     //decoder.showpaths();
+	  //if(decout) {
+	  //  cout << "INPUT FOUND: " << decoder.inputs << endl;
+	  //}
    }
    cout << endl;
    // dump out the rest
@@ -65,9 +65,10 @@ int main()
    while(decoder.getinpnow(1)) {
 	  cout << "INPUT: " << decoder.inputs << endl;
    }
+   cout << "INPUT: " << decoder.inputs << endl;
 
-
-   // test the soft-decision decoder
+   cout << endl << endl << endl;
+   //// test the soft-decision decoder
    BinConvdecBPSK decoderBPSK(conv,8);
    BPSKmodvec modulator(n);
    conv.setstate(0);
@@ -90,9 +91,9 @@ int main()
 	  // call the decoder
 	  decout = decoderBPSK.decode(mod);
       // decoderBPSK.showpaths();
-	  if(decout) {
-		 cout << "INPUT FOUND: " << decoderBPSK.inputs << endl;
-	  }
+	  //if(decout) {
+	  //  cout << "INPUT FOUND: " << decoderBPSK.inputs << endl;
+	  //}
    }
    cout << endl;
    // dump out the rest
@@ -100,6 +101,7 @@ int main()
    while(decoderBPSK.getinpnow(1)) {
 	  cout << "INPUT: " << decoderBPSK.inputs << endl;
    }
+   cout << "INPUT: " << decoderBPSK.inputs << endl;
 }
 
 

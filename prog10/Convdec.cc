@@ -55,9 +55,54 @@ Convdec::viterbi()
    unsigned int fromin;			// input from previous state
 
 
-   // Fill in the blanks ...
-
-   return(1);
+   //find the best path metric to each state
+   for(state = 0; state < numstates; state++)
+   {
+      bestcost = LARGE;
+      //check branches coming into the state
+      for(branch = 0; branch < numbranches; branch++)
+      {
+         fromst = prevstate[state][branch];
+         fromin = inputfrom[state][branch];
+         //add branch metric
+         cost = metrics[fromst] + metric(fromst, fromin);
+         //update the branch metric if it is better
+         if(cost < bestcost)
+         {
+            bestcost = cost;
+            bestfrom = fromst;
+            bestinp  = fromin;
+         }
+      }
+      //save the path
+      paths[fpath].state[state] = bestfrom;
+      paths[fpath].input[state] = bestinp;
+      //update state cost
+      othermetrics[state] = bestcost;
+   }
+   //swap current and next metric arrays
+   metswap = metrics;
+   metrics = othermetrics;
+   othermetrics = metswap;
+   //move forward in the circular buffer
+   fpath = inci(fpath);
+   //don't overflow the buffer...
+   if(fpath == bpath)
+   {
+      bpath = inci(bpath);
+   }
+   //find best ending state
+   d = LARGE;
+   for(state = 0; state < numstates; state++)
+   {
+      if(metrics[state] < d)
+      {
+         d = metrics[state];
+         beststate = state;
+         bestst_back = state;
+      }
+   }
+   return 1;
 }
 
 int
@@ -68,17 +113,46 @@ Convdec::getinpnow(int adv)
    // if we reach here, we are ready to decode
    // we already know the best one, from the assignment above.  
    // Only need to follow it back
-   if(bpath == fpath) return 0;  // no information to print
+  // cout << "bpath is " << bpath << " fpath is " << fpath << endl;
+   if(bpath == fpath)
+   {
+      bpath = deci(bpath);
+     // cout << "now bpath is " << bpath << endl;
+      unsigned int bestst_back;
+      int i = deci(fpath);
+      bestst_back = beststate;
+      //cout << "entering do while" << endl;
+      do {
+         //cout << "starting on iteration " << i << endl;
+         bestst_back = paths[i].state[bestst_back];
+         i = deci(i);
+      }
+      while(i != bpath);
+      //cout << "setting inputs" << endl;
+      inputs = paths[bpath].input[bestst_back];
+      bpath = inci(bpath);
+      if(adv) {
+	      bpath = inci(bpath);
+      }
+      return 0;  // no information to print
+   }
 
+   bpath = deci(bpath);
+   //cout << "now bpath is " << bpath << endl;
    unsigned int bestst_back;
    int i = deci(fpath);
    bestst_back = beststate;
+   //cout << "entering do while" << endl;
    do {
-	  bestst_back = paths[i].state[bestst_back];
-	  i = deci(i);
+      //cout << "starting on iteration " << i << endl;
+	   bestst_back = paths[i].state[bestst_back];
+	   i = deci(i);
    }
    while(i != bpath);
+   //cout << "setting inputs" << endl;
    inputs = paths[bpath].input[bestst_back];
+   //cout << "done setting inputs" << endl;
+   bpath = inci(bpath);
    if(adv) {
 	  bpath = inci(bpath);
    }
@@ -181,7 +255,7 @@ void Convdec::showpaths(void)
 {
    int i,state;
 
-   return;  // don't print ....
+   //return;  // don't print ....
 
    cout << "fpath=" << fpath << "\tbpath=" << bpath << "\n";
 

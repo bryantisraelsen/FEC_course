@@ -49,7 +49,6 @@ public:
 	  return viterbifinddfree();
    };
    void buildoutputmat(BinConv& encoder);
-
 };
 
 #endif

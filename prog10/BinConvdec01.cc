@@ -49,7 +49,6 @@ BinConvdec01::buildoutputmat(BinConv & encoder)
    encoder.setstate(savestate);
 }		 
 
-
 /*
 Local Variables:
 compile-command: "g++ -c BinConvdec01.cc"
